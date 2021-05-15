@@ -35,14 +35,14 @@ const AppBar = () => {
           </TouchableOpacity>
         </Left>
 
-        <Body>
+        {/* <Body>
           <Image
             // eslint-disable-next-line global-require
             source={require('../../assets/Logo.png')}
             resizeMode="contain"
             style={{ alignSelf: 'flex-start', height: '100%', width: '150%' }}
           />
-        </Body>
+        </Body> */}
 
         <Right />
       </Header>

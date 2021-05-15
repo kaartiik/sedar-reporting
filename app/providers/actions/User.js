@@ -29,6 +29,7 @@ export const actions = {
   },
   UPDATE: {
     USER_PROFILE: 'UPDATE_USER_PROFILE',
+    USER_LOCATION: 'UPDATE_USER_LOCATION',
   },
 };
 
@@ -86,16 +87,9 @@ export const syncChats = () => ({
   type: actions.SYNC_CHATS,
 });
 
-export const register = (
-  location,
-  username,
-  mobile,
-  email,
-  password,
-  userImage
-) => ({
+export const register = (username, email, password, age) => ({
   type: actions.REGISTER_REQUEST,
-  payload: { location, username, mobile, email, password, userImage },
+  payload: { username, email, password, age },
 });
 
 export const login = ({ email, password }) => ({
@@ -106,6 +100,11 @@ export const login = ({ email, password }) => ({
 
 export const logout = () => ({
   type: actions.LOGOUT.REQUEST,
+});
+
+export const updateUserLocation = (location) => ({
+  type: actions.UPDATE.USER_LOCATION,
+  payload: location,
 });
 
 export const forgotPassword = (email) => ({

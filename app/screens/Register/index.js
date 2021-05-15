@@ -58,10 +58,11 @@ const styles = StyleSheet.create({
 
 const validationSchema = yup.object().shape({
   username: yup.string().required('Required'),
-  mobile: yup.string().required('Required'),
+  //mobile: yup.string().required('Required'),
   email: yup.string().required('Required').email('Please enter a valid email'),
   password: yup.string().required('Required').min(6, 'Minimum 6 characters'),
-  location: yup.string().required('Required'),
+  age: yup.string().required('Required'),
+  //location: yup.string().required('Required'),
 });
 
 export default function Register({ navigation }) {
@@ -73,8 +74,12 @@ export default function Register({ navigation }) {
     isLoading: state.userReducer.isLoading,
   }));
 
-  const handleLogin = ({ location, username, mobile, email, password }) => {
-    dispatch(register(location, username, mobile, email, password, userImage));
+  // const handleLogin = ({ location, username, mobile, email, password }) => {
+  //   dispatch(register(location, username, mobile, email, password, userImage));
+  // };
+
+  const handleLogin = ({ username, email, password, age }) => {
+    dispatch(register(username, email, password, age));
   };
 
   const findNewImage = async () => {
@@ -126,11 +131,12 @@ export default function Register({ navigation }) {
             <View style={styles.form}>
               <Formik
                 initialValues={{
-                  location: '',
+                  //location: '',
                   username: '',
-                  mobile: '',
+                  //mobile: '',
                   email: '',
                   password: '',
+                  age: '',
                 }}
                 onSubmit={(values) => handleLogin(values)}
                 validationSchema={validationSchema}
@@ -151,7 +157,7 @@ export default function Register({ navigation }) {
                         {'Hello there.\nRegister an account.'}
                       </Text>
 
-                      <View style={{ alignItems: 'center' }}>
+                      {/* <View style={{ alignItems: 'center' }}>
                         {userImage === null ? (
                           <Image
                             source={require('../../../assets/default_avatar.jpg')}
@@ -175,7 +181,7 @@ export default function Register({ navigation }) {
                         <TouchableOpacity onPress={() => findNewImage()}>
                           <Text>Edit Image</Text>
                         </TouchableOpacity>
-                      </View>
+                      </View> */}
 
                       <View style={styles.textboxContainer}>
                         <TextInput
@@ -218,6 +224,19 @@ export default function Register({ navigation }) {
 
                       <View style={styles.textboxContainer}>
                         <TextInput
+                          placeholder="Enter age..."
+                          value={values.age}
+                          onChangeText={handleChange('age')}
+                          onBlur={handleBlur('age')}
+                        />
+                      </View>
+                      <Text style={{ color: 'red' }}>
+                        {(touched.username || submitCount > 0) &&
+                          errors.username}
+                      </Text>
+
+                      {/* <View style={styles.textboxContainer}>
+                        <TextInput
                           placeholder="Enter mobile number..."
                           value={values.mobile}
                           onChangeText={handleChange('mobile')}
@@ -248,7 +267,7 @@ export default function Register({ navigation }) {
                         }
                       >
                         <Text style={{ color: 'white' }}>Detect Location</Text>
-                      </TouchableOpacity>
+                      </TouchableOpacity> */}
 
                       <TouchableOpacity
                         style={styles.bigBtn}
