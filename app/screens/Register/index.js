@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
 
 const validationSchema = yup.object().shape({
   username: yup.string().required('Required'),
-  //mobile: yup.string().required('Required'),
+  mobile: yup.string().required('Required'),
   email: yup.string().required('Required').email('Please enter a valid email'),
   password: yup.string().required('Required').min(6, 'Minimum 6 characters'),
   age: yup.string().required('Required'),
@@ -78,44 +78,8 @@ export default function Register({ navigation }) {
   //   dispatch(register(location, username, mobile, email, password, userImage));
   // };
 
-  const handleLogin = ({ username, email, password, age }) => {
-    dispatch(register(username, email, password, age));
-  };
-
-  const findNewImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: 'Images',
-      allowsEditing: true,
-      quality: 1,
-    });
-
-    if (!result.cancelled) {
-      setUserImage({
-        imageUri: result.uri,
-        imageName: result.uri.substring(result.uri.lastIndexOf('/') + 1),
-      });
-    }
-  };
-
-  const getLocationAsync = async (setFieldValue, field) => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-      alert('Permission to access location was denied');
-    }
-
-    let location = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.Highest,
-    });
-    const { latitude, longitude } = location.coords;
-    getGeocodeAsync({ latitude, longitude }, setFieldValue, field);
-  };
-
-  const getGeocodeAsync = async (location, setFieldValue, field) => {
-    let geocode = await Location.reverseGeocodeAsync(location);
-    setFieldValue(
-      field,
-      `${geocode[0].street}, ${geocode[0].city}, ${geocode[0].district}, ${geocode[0].region}`
-    );
+  const handleLogin = ({ username, email, password, age, mobile }) => {
+    dispatch(register(username, email, password, age, mobile));
   };
 
   return (
@@ -133,7 +97,7 @@ export default function Register({ navigation }) {
                 initialValues={{
                   //location: '',
                   username: '',
-                  //mobile: '',
+                  mobile: '',
                   email: '',
                   password: '',
                   age: '',
@@ -156,32 +120,6 @@ export default function Register({ navigation }) {
                       <Text style={styles.greeting}>
                         {'Hello there.\nRegister an account.'}
                       </Text>
-
-                      {/* <View style={{ alignItems: 'center' }}>
-                        {userImage === null ? (
-                          <Image
-                            source={require('../../../assets/default_avatar.jpg')}
-                            style={{
-                              height: IMAGE_DIMENSION,
-                              width: IMAGE_DIMENSION,
-                              borderRadius: IMAGE_DIMENSION / 2,
-                            }}
-                          />
-                        ) : (
-                          <Image
-                            source={{ uri: userImage.imageUri }}
-                            style={{
-                              height: IMAGE_DIMENSION,
-                              width: IMAGE_DIMENSION,
-                              borderRadius: IMAGE_DIMENSION / 2,
-                            }}
-                          />
-                        )}
-
-                        <TouchableOpacity onPress={() => findNewImage()}>
-                          <Text>Edit Image</Text>
-                        </TouchableOpacity>
-                      </View> */}
 
                       <View style={styles.textboxContainer}>
                         <TextInput
@@ -235,7 +173,7 @@ export default function Register({ navigation }) {
                           errors.username}
                       </Text>
 
-                      {/* <View style={styles.textboxContainer}>
+                      <View style={styles.textboxContainer}>
                         <TextInput
                           placeholder="Enter mobile number..."
                           value={values.mobile}
@@ -247,7 +185,7 @@ export default function Register({ navigation }) {
                         {(touched.mobile || submitCount > 0) && errors.mobile}
                       </Text>
 
-                      <View style={styles.textboxContainer}>
+                      {/* <View style={styles.textboxContainer}>
                         <TextInput
                           placeholder="Enter location..."
                           value={values.location}

@@ -4,7 +4,7 @@ const initialState = {
   name: '',
   location: null,
   email: '',
-  //mobile: '',
+  mobile: '',
   age: '',
   uuid: '',
   //profilePicture: null,
@@ -22,7 +22,7 @@ export default function userReducer(state = initialState, action = {}) {
         name,
         email,
         age,
-        //mobile,
+        mobile,
         //profile_picture,
         //location,
         //token,
@@ -33,52 +33,11 @@ export default function userReducer(state = initialState, action = {}) {
         name,
         email,
         age,
-        //mobile,
+        mobile,
         //location,
         //token,
       };
     }
-
-    case actions.PUT.USER_PROFILE_PICTURE: {
-      const profile_picture = action.payload;
-      return {
-        ...state,
-        profilePicture: {
-          imageName: profile_picture.image_name,
-          imageUri: profile_picture.image_url,
-        },
-      };
-    }
-
-    case actions.PUT.USERNAME:
-      return {
-        ...state,
-        username: action.payload,
-      };
-
-    case actions.PUT.USER_MOBILE:
-      return {
-        ...state,
-        mobile: action.payload,
-      };
-
-    case actions.PUT.USER_LOCATION:
-      return {
-        ...state,
-        location: action.payload,
-      };
-
-    case actions.PUT.USER_CHATS:
-      return {
-        ...state,
-        userChats: action.payload,
-      };
-
-    case actions.PUT.CHATS:
-      return {
-        ...state,
-        allChats: action.payload,
-      };
 
     case actions.PUT.LOADING_STATUS:
       return {

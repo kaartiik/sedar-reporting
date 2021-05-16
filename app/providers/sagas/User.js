@@ -15,18 +15,7 @@ import * as Permissions from 'expo-permissions';
 import * as Notifications from 'expo-notifications';
 import { navigate, reset, goBack } from '../services/NavigatorService';
 import rsf, { auth, database } from '../../providers/config';
-import {
-  actions,
-  putUserProfile,
-  putUserName,
-  putUserMobile,
-  putUserLocation,
-  putToken,
-  putLoadingStatus,
-  putChats,
-  putUserChats,
-  putUserProfilePicture,
-} from '../actions/User';
+import { actions, putUserProfile, putLoadingStatus } from '../actions/User';
 
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -114,20 +103,9 @@ function* updateUserLocationSaga({ payload }) {
   }
 }
 
-function* forgotPasswordSaga({ payload }) {
-  try {
-    const { email } = payload;
-    yield call(rsf.auth.sendPasswordResetEmail, email);
-    alert('Password reset email has been sent your email.');
-  } catch (error) {
-    alert(error);
-    return;
-  }
-}
-
 function* registerSaga({ payload }) {
   yield put(putLoadingStatus(true));
-  const { username, email, password, age } = payload;
+  const { username, email, password, age, mobile } = payload;
   try {
     const { user } = yield call(
       rsf.auth.createUserWithEmailAndPassword,
@@ -139,6 +117,7 @@ function* registerSaga({ payload }) {
       name: username,
       email,
       age,
+      mobile,
       uuid: user.uid,
     });
 
@@ -166,7 +145,6 @@ export default function* User() {
     takeLatest(actions.REGISTER_REQUEST, registerSaga),
     takeLatest(actions.LOGIN.REQUEST, loginSaga),
     takeLatest(actions.LOGOUT.REQUEST, logoutSaga),
-    takeLatest(actions.FORGOT_PASSWORD, forgotPasswordSaga),
     takeEvery(actions.SYNC_USER, syncUserSaga),
     takeEvery(actions.UPDATE.USER_LOCATION, updateUserLocationSaga),
   ]);

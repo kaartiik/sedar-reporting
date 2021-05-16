@@ -72,10 +72,11 @@ const GeneralInfo = ({ title, info }) => (
 function Home({ route, navigation }) {
   const dispatch = useDispatch();
 
-  const { name, email, age, isLoading } = useSelector((state) => ({
+  const { name, email, age, mobile, isLoading } = useSelector((state) => ({
     name: state.userReducer.name,
     email: state.userReducer.email,
     age: state.userReducer.age,
+    mobile: state.userReducer.mobile,
     isLoading: state.userReducer.isLoading,
   }));
 
@@ -107,6 +108,7 @@ function Home({ route, navigation }) {
             <GeneralInfo title="Name" info={name} />
             <GeneralInfo title="Email" info={email} />
             <GeneralInfo title="Age" info={age} />
+            <GeneralInfo title="Mobile" info={mobile} />
 
             <Text style={{ color: 'black', textAlign: 'center' }}>
               Your location is being tracked by the hospital
