@@ -3,7 +3,7 @@ import colours from './colours';
 
 const globalStyles = StyleSheet.create({
   screenBackground: { backgroundColor: colours.white },
-  screenPadding: { flex: 1, padding: 10 },
+  screenPadding: { flex: 1, paddingHorizontal: 10, paddingVertical: 20 },
   screenHorizontalPadding: { flex: 1, paddingHorizontal: 10 },
   screenHorizontalPaddingWithoutFlex: { paddingHorizontal: 10 },
   authBottomScreenMargin: { marginTop: 8 },

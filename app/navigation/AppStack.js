@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import BottomTabNavigator from './BottomTabNavigator';
 import Disclaimer from '../screens/Disclaimer';
 import UserDetails from '../screens/UserDetails';
 import DefectDetails from '../screens/DefectDetails';

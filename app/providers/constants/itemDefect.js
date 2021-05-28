@@ -1,99 +1,99 @@
 const ITEM_DEFECT = [
   {
     label: 'Floor',
-    value: 'ID1',
+    value: 0,
   },
   {
     label: 'Tiles',
-    value: 'ID2',
+    value: 1,
   },
   {
     label: 'Siling',
-    value: 'ID3',
+    value: 2,
   },
   {
     label: 'Wall',
-    value: 'ID4',
+    value: 3,
   },
   {
     label: 'Door',
-    value: 'ID5',
+    value: 4,
   },
   {
     label: 'Window',
-    value: 'ID6',
+    value: 5,
   },
   {
     label: 'Frame',
-    value: 'ID7',
+    value: 6,
   },
   {
     label: 'Louvre',
-    value: 'ID8',
+    value: 7,
   },
   {
     label: 'Gate',
-    value: 'ID9',
+    value: 8,
   },
   {
     label: 'Electronic Power Socket',
-    value: 'ID10',
+    value: 9,
   },
   {
     label: 'Electric Switch',
-    value: 'ID11',
+    value: 10,
   },
   {
     label: 'Lighting',
-    value: 'ID12',
+    value: 11,
   },
   {
     label: 'Fan',
-    value: 'ID13',
+    value: 12,
   },
   {
     label: 'Piping',
-    value: 'ID14',
+    value: 13,
   },
   {
     label: 'Drainage',
-    value: 'ID15',
+    value: 14,
   },
   {
     label: 'Sewerage',
-    value: 'ID16',
+    value: 15,
   },
   {
     label: 'Roof',
-    value: 'ID17',
+    value: 16,
   },
   {
     label: 'Toilet Fittings',
-    value: 'ID18',
+    value: 17,
   },
   {
     label: 'Cabinet',
-    value: 'ID19',
+    value: 18,
   },
   {
     label: 'Floor Trap',
-    value: 'ID20',
+    value: 19,
   },
   {
     label: 'Column',
-    value: 'ID21',
+    value: 20,
   },
   {
     label: 'Beam',
-    value: 'ID22',
+    value: 21,
   },
   {
     label: 'Painting',
-    value: 'ID23',
+    value: 22,
   },
   {
     label: 'Rain Gutter',
-    value: 'ID24',
+    value: 23,
   },
 ];
 

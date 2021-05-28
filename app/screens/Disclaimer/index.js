@@ -16,12 +16,9 @@ import {
   Platform,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { Label, Picker, Item, Input } from 'native-base';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { Formik, getIn } from 'formik';
 import * as Yup from 'yup';
-import RegularTextBox from '../../components/RegularTextBox';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import colours from '../../providers/constants/colours';
 import globalStyles from '../../providers/constants/globalStyles';
@@ -93,6 +90,12 @@ function Disclaimer({ route }) {
               ]}
             >
               <Text>Disclaimer</Text>
+              <Text>
+                We only collect the information you choose to give us, and we
+                process it with your consent. We only need the minimum of
+                personal information that is necessary to fulfill your purpose
+                of interaction with us, we do not sell it to third parties.
+              </Text>
 
               <TouchableOpacity
                 style={{ alignSelf: 'flex-end' }}

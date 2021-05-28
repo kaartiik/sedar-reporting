@@ -1,23 +1,23 @@
 const LOCATIONS = [
   {
     label: 'Car Porch',
-    value: 'L1',
+    value: 0,
   },
   {
     label: 'Apron',
-    value: 'L2',
+    value: 1,
   },
   {
     label: 'Patio Area',
-    value: 'L3',
+    value: 2,
   },
   {
     label: 'Terrace',
-    value: 'L4',
+    value: 3,
   },
   {
     label: 'Wash Area',
-    value: 'L5',
+    value: 4,
   },
   {
     label: 'Living Area',
@@ -25,47 +25,47 @@ const LOCATIONS = [
   },
   {
     label: 'Dining Area',
-    value: 'L7',
+    value: 6,
   },
   {
     label: 'Kitchen',
-    value: 'L8',
+    value: 7,
   },
   {
     label: 'Master Bedroom',
-    value: 'L9',
+    value: 8,
   },
   {
     label: 'Bedroom 2',
-    value: 'L10',
+    value: 9,
   },
   {
     label: 'Bedroom 3',
-    value: 'L11',
+    value: 10,
   },
   {
     label: 'Bedroom 4',
-    value: 'L12',
+    value: 11,
   },
   {
     label: 'Bathroom 1',
-    value: 'L13',
+    value: 12,
   },
   {
     label: 'Bathroom 2',
-    value: 'L14',
+    value: 13,
   },
   {
     label: 'Bathroom 3',
-    value: 'L15',
+    value: 14,
   },
   {
     label: 'Bathroom 4',
-    value: 'L16',
+    value: 15,
   },
   {
     label: 'Store',
-    value: 'L17',
+    value: 16,
   },
 ];
 

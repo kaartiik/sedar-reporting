@@ -31,6 +31,10 @@ import DEFECT_DETAILS from '../../providers/constants/defectDetail';
 import colours from '../../providers/constants/colours';
 import globalStyles from '../../providers/constants/globalStyles';
 import dayjs from 'dayjs';
+import {
+  putDefectDetails,
+  addreportedDefect,
+} from '../../providers/actions/User';
 
 const styles = StyleSheet.create({
   divider: {
@@ -74,31 +78,12 @@ const styles = StyleSheet.create({
 function DefectDetails({ route }) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-
-  const [location, setLocation] = useState('');
-  const [itemDefect, setItemDefect] = useState('');
-  const [defectDetail, setDefectDetail] = useState('');
-  const [comment, setComment] = useState('');
   const [picture, setPicture] = useState([]);
 
-  //   const [othersError] = useState('Type Required.');
-
-  //   const {
-  //     currentProject,
-  //     currentSite,
-  //     existingManpower,
-  //     manpowerCategoryList,
-  //     manpowerSubcategoryList,
-  //     isLoading,
-  //   } = useSelector((state) => ({
-  //     currentProject: state.projectsReducer.currentProject,
-  //     currentSite: state.projectsReducer.currentSite,
-  //     existingManpower: state.resourcesReducer.existingManpower,
-  //     manpowerCategoryList: state.resourcesReducer.manpowerCategoryList,
-  //     manpowerSubcategoryList: state.resourcesReducer.manpowerSubcategoryList,
-  //     isLoading: state.resourcesReducer.isLoading,
-  //   }));
-
+  const { runningNumber, isLoading } = useSelector((state) => ({
+    runningNumber: state.userReducer.runningNumber,
+    isLoading: state.userReducer.isLoading,
+  }));
   useEffect(() => {}, []);
 
   const onSelectPhotos = (res) => {
@@ -134,6 +119,23 @@ function DefectDetails({ route }) {
     if (onSelectPhotos) {
       onSelectPhotos(Promise.resolve(modPhoto));
     }
+  };
+
+  const handleNext = (values) => {
+    const { location, itemDefect, defectDetail, comment } = values;
+
+    dispatch(
+      putDefectDetails({ picture, location, itemDefect, defectDetail, comment })
+    );
+
+    dispatch(
+      addreportedDefect(
+        { picture, location, itemDefect, defectDetail, comment },
+        () => navigation.navigate('Report')
+      )
+    );
+
+    navigation.navigate('DefectDetails');
   };
 
   return (
@@ -188,7 +190,16 @@ function DefectDetails({ route }) {
                         globalStyles.mildShadow,
                       ]}
                     >
-                      <Text>{dayjs().format('DD-MM-YYYY')}</Text>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          marginVertical: 10,
+                        }}
+                      >
+                        <Text>Date: {dayjs().format('DD-MM-YYYY')}</Text>
+                        <Text>Defect Number: {runningNumber}</Text>
+                      </View>
 
                       {picture.length > 0 ? (
                         <View style={{ marginVertical: 8 }}>
@@ -283,6 +294,11 @@ function DefectDetails({ route }) {
                             )
                           }
                         >
+                          <Picker.Item
+                            key="defaultLoc"
+                            label="Select Location"
+                            value=""
+                          />
                           {LOCATIONS.map((item) => (
                             <Picker.Item
                               key={item.value}
@@ -323,6 +339,11 @@ function DefectDetails({ route }) {
                             )
                           }
                         >
+                          <Picker.Item
+                            key="defaultItemDefect"
+                            label="Select Item Defect"
+                            value=""
+                          />
                           {ITEM_DEFECT.map((item) => (
                             <Picker.Item
                               key={item.value}
@@ -363,6 +384,11 @@ function DefectDetails({ route }) {
                             )
                           }
                         >
+                          <Picker.Item
+                            key="defaultDefectDetails"
+                            label="Select Defect Details"
+                            value=""
+                          />
                           {DEFECT_DETAILS.map((item) => (
                             <Picker.Item
                               key={item.value}
@@ -394,10 +420,13 @@ function DefectDetails({ route }) {
                           justifyContent: 'space-between',
                         }}
                       >
-                        <TouchableOpacity title="SUBMIT" onPress={handleSubmit}>
+                        <TouchableOpacity
+                          title="SUBMIT"
+                          onPress={() => navigation.goBack()}
+                        >
                           <Feather name="arrow-left" size={20} color="black" />
                         </TouchableOpacity>
-                        <TouchableOpacity title="SUBMIT" onPress={handleReset}>
+                        <TouchableOpacity title="SUBMIT" onPress={handleSubmit}>
                           <Text>Finish</Text>
                         </TouchableOpacity>
                       </View>

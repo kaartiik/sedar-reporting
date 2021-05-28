@@ -1,59 +1,59 @@
 const DEFECT_DETAILS = [
   {
     label: 'Floor',
-    value: 'DD1',
+    value: 0,
   },
   {
     label: 'Break',
-    value: 'DD2',
+    value: 1,
   },
   {
     label: 'Chips',
-    value: 'DD3',
+    value: 2,
   },
   {
     label: 'Scratch',
-    value: 'DD4',
+    value: 3,
   },
   {
     label: 'Hollow',
-    value: 'DD5',
+    value: 4,
   },
   {
     label: 'Leakage/Drips',
-    value: 'DD6',
+    value: 5,
   },
   {
     label: 'Clogged/',
-    value: 'DD7',
+    value: 6,
   },
   {
     label: 'Dis-functional',
-    value: 'DD8',
+    value: 7,
   },
   {
     label: 'Unfinish/Incomplete',
-    value: 'DD9',
+    value: 8,
   },
   {
     label: 'Water Mark',
-    value: 'DD10',
+    value: 9,
   },
   {
     label: 'Bad Odor',
-    value: 'DD11',
+    value: 10,
   },
   {
     label: 'Moist/Mold',
-    value: 'DD12',
+    value: 11,
   },
   {
     label: 'Gaps',
-    value: 'DD13',
+    value: 12,
   },
   {
     label: 'Dirty',
-    value: 'DD14',
+    value: 13,
   },
 ];
 
