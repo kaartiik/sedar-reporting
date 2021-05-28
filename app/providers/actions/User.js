@@ -1,60 +1,35 @@
 export const actions = {
-  REGISTER_REQUEST: 'REGISTER_REQUEST',
-  LOGIN: {
-    REQUEST: 'LOGIN_REQUEST',
-  },
-  FORGOT_PASSWORD: 'FORGOT_PASSWORD',
-  SYNC_USER: 'SYNC_USER',
-  LOGOUT: {
-    REQUEST: 'LOGOUT_REQUEST',
+  GET: {
+    USER_DETAILS: 'GET_USER_DETAILS',
+    DEFECT_DETAILS: 'GET_DEFECT_DETAILS',
   },
   PUT: {
-    USER_PROFILE: 'PUT_USER_PROFILE',
-    LOADING_STATUS: 'PUT_LOADING_STATUS',
+    USER_DETAILS: 'PUT_USER_DETAILS',
+    DEFECT_DETAILS: 'PUT_DEFECT_DETAILS',
   },
-  UPDATE: {
-    USER_LOCATION: 'UPDATE_USER_LOCATION',
-  },
+  SYNC_USER: 'SYNC_USER',
 };
-
-export const updateUserProfile = (
-  username,
-  mobile,
-  location,
-  profilePicture,
-  onSuccess
-) => ({
-  type: actions.UPDATE.USER_PROFILE,
-  payload: { username, mobile, location, profilePicture, onSuccess },
-});
 
 export const syncUser = () => ({
   type: actions.SYNC_USER,
 });
 
-export const register = (username, email, password, age, mobile) => ({
-  type: actions.REGISTER_REQUEST,
-  payload: { username, email, password, age, mobile },
+export const getUserDetails = () => ({
+  type: actions.GET.USER_DETAILS,
 });
 
-export const login = ({ email, password }) => ({
-  type: actions.LOGIN.REQUEST,
-  email,
-  password,
+export const getDefectDetails = () => ({
+  type: actions.GET.DEFECT_DETAILS,
 });
 
-export const logout = () => ({
-  type: actions.LOGOUT.REQUEST,
+export const putUserDetails = (values) => ({
+  type: actions.PUT.USER_DETAILS,
+  payload: values,
 });
 
-export const updateUserLocation = (location) => ({
-  type: actions.UPDATE.USER_LOCATION,
-  payload: location,
-});
-
-export const putUserProfile = (profile) => ({
-  type: actions.PUT.USER_PROFILE,
-  payload: profile,
+export const putDefectDetails = (values) => ({
+  type: actions.PUT.DEFECT_DETAILS,
+  payload: values,
 });
 
 export const putLoadingStatus = (isLoading) => ({

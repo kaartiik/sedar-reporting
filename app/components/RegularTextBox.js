@@ -18,6 +18,8 @@ const RegularTextBox = ({
   multiline,
   height,
   maxLength,
+  numberOfLines,
+  keyboardType,
 }) => {
   return (
     <>
@@ -46,6 +48,8 @@ const RegularTextBox = ({
           secureTextEntry={secureTextEntry}
           onBlur={handleBlur && handleBlur}
           maxLength={maxLength}
+          numberOfLines={numberOfLines}
+          keyboardType={keyboardType}
         />
       </Item>
       {isError && (
@@ -67,6 +71,8 @@ RegularTextBox.defaultProps = {
   multiline: false,
   height: 38,
   maxLength: 500,
+  keyboardType: 'default',
+  numberOfLines: 1,
 };
 
 RegularTextBox.propTypes = {
@@ -83,6 +89,8 @@ RegularTextBox.propTypes = {
   multiline: PropTypes.bool,
   height: PropTypes.number,
   maxLength: PropTypes.number,
+  keyboardType: PropTypes.string,
+  numberOfLines: PropTypes.number,
 };
 
 export default RegularTextBox;

@@ -1,43 +1,24 @@
 import { actions } from '../actions/User';
 
 const initialState = {
-  name: '',
-  location: null,
-  email: '',
-  mobile: '',
-  age: '',
-  uuid: '',
-  //profilePicture: null,
-  //token: '',
-  userChats: [],
-  allChats: null,
+  userDetails: null,
+  defectDetails: null,
   isLoading: false,
 };
 
 export default function userReducer(state = initialState, action = {}) {
   switch (action.type) {
-    case actions.PUT.USER_PROFILE: {
-      const {
-        uuid,
-        name,
-        email,
-        age,
-        mobile,
-        //profile_picture,
-        //location,
-        //token,
-      } = action.payload;
+    case actions.PUT.USER_DETAILS:
       return {
         ...state,
-        uuid,
-        name,
-        email,
-        age,
-        mobile,
-        //location,
-        //token,
+        userDetails: action.payload,
       };
-    }
+
+    case actions.PUT.DEFECT_DETAILS:
+      return {
+        ...state,
+        defectDetails: action.payload,
+      };
 
     case actions.PUT.LOADING_STATUS:
       return {

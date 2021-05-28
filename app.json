@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Hospital Tracker",
-    "slug": "hospitaltracker-app",
+    "name": "Sedar",
+    "slug": "sedar-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/app_icon.png",
@@ -17,11 +17,11 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.example.hospitaltracker",
+      "bundleIdentifier": "com.example.sedar",
       "supportsTablet": true
     },
     "android": {
-      "package": "com.example.hospitaltracker",
+      "package": "com.example.sedar",
       "adaptiveIcon": {
         "foregroundImage": "./assets/app_icon.png",
         "backgroundColor": "#FFFFFF"

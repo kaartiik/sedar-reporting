@@ -12,6 +12,7 @@ const colours = {
   LightGray: '9d9d9d',
   smoke: '#EEEEEE',
   white: '#FFFFFF',
+  errorText: 'red',
 };
 
 // themePrimary: '#E84C3D',
