@@ -21,7 +21,7 @@ const LOCATIONS = [
   },
   {
     label: 'Living Area',
-    value: 'L6',
+    value: 5,
   },
   {
     label: 'Dining Area',

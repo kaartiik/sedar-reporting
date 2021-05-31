@@ -34,6 +34,7 @@ import dayjs from 'dayjs';
 import {
   putDefectDetails,
   addreportedDefect,
+  addreportedDefectFinal,
 } from '../../providers/actions/User';
 
 const styles = StyleSheet.create({
@@ -84,7 +85,6 @@ function DefectDetails({ route }) {
     runningNumber: state.userReducer.runningNumber,
     isLoading: state.userReducer.isLoading,
   }));
-  useEffect(() => {}, []);
 
   const onSelectPhotos = (res) => {
     if (!res) {
@@ -121,6 +121,21 @@ function DefectDetails({ route }) {
     }
   };
 
+  const handleFinish = (values) => {
+    const { location, itemDefect, defectDetail, comment } = values;
+
+    dispatch(
+      putDefectDetails({ picture, location, itemDefect, defectDetail, comment })
+    );
+
+    dispatch(
+      addreportedDefectFinal(
+        { picture, location, itemDefect, defectDetail, comment, runningNumber },
+        () => navigation.navigate('Report')
+      )
+    );
+  };
+
   const handleNext = (values) => {
     const { location, itemDefect, defectDetail, comment } = values;
 
@@ -130,12 +145,10 @@ function DefectDetails({ route }) {
 
     dispatch(
       addreportedDefect(
-        { picture, location, itemDefect, defectDetail, comment },
-        () => navigation.navigate('Report')
+        { picture, location, itemDefect, defectDetail, comment, runningNumber },
+        () => navigation.navigate('Disclaimer')
       )
     );
-
-    navigation.navigate('DefectDetails');
   };
 
   return (
@@ -149,294 +162,327 @@ function DefectDetails({ route }) {
         style={{ flex: 1 }}
       >
         <View style={globalStyles.screenPadding}>
-          {/* {isLoading ? (
+          {isLoading ? (
             <LoadingIndicator />
-          ) : ( */}
-          <ScrollView>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <Formik
-                initialValues={{
-                  location: '',
-                  itemDefect: '',
-                  defectDetail: '',
-                  comment: '',
-                }}
-                validationSchema={Yup.object().shape({
-                  location: Yup.string().required('Location is required.'),
-                  itemDefect: Yup.string().required('Item Defect is required.'),
-                  defectDetail: Yup.string().required(
-                    'Defect Detail is required.'
-                  ),
-                  comment: Yup.string(),
-                })}
-                onSubmit={(values) => handleNext(values)}
-              >
-                {({
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  handleReset,
-                  values,
-                  errors,
-                  touched,
-                  submitCount,
-                  setFieldValue,
-                  submitForm,
-                }) => (
-                  <View>
-                    <View
-                      style={[
-                        globalStyles.addResourceFormContainer,
-                        globalStyles.mildShadow,
-                      ]}
-                    >
+          ) : (
+            <ScrollView>
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <Formik
+                  initialValues={{
+                    location: '',
+                    itemDefect: '',
+                    defectDetail: '',
+                    comment: '',
+                  }}
+                  validationSchema={Yup.object().shape({
+                    location: Yup.string().required('Location is required.'),
+                    itemDefect: Yup.string().required(
+                      'Item Defect is required.'
+                    ),
+                    defectDetail: Yup.string().required(
+                      'Defect Detail is required.'
+                    ),
+                    comment: Yup.string(),
+                  })}
+                  onSubmit={(values) => handleNext(values)}
+                >
+                  {({
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    handleReset,
+                    values,
+                    errors,
+                    touched,
+                    submitCount,
+                    setFieldValue,
+                    submitForm,
+                  }) => (
+                    <View>
                       <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          marginVertical: 10,
-                        }}
+                        style={[
+                          globalStyles.addResourceFormContainer,
+                          globalStyles.mildShadow,
+                        ]}
                       >
-                        <Text>Date: {dayjs().format('DD-MM-YYYY')}</Text>
-                        <Text>Defect Number: {runningNumber}</Text>
-                      </View>
-
-                      {picture.length > 0 ? (
-                        <View style={{ marginVertical: 8 }}>
-                          <Image
-                            source={{ uri: picture[0].encodedImage }}
-                            style={{
-                              height: 200,
-                              width: '100%',
-                              resizeMode: 'cover',
-                              borderRadius: 6,
-                            }}
-                          />
-
-                          <TouchableOpacity
-                            style={{
-                              position: 'absolute',
-                              top: 5,
-                              right: 5,
-                              padding: 5,
-                              backgroundColor: 'red',
-                              borderRadius: 6,
-                            }}
-                            onPress={() => setPicture([])}
-                          >
-                            <Feather name="x" size={20} color={colours.white} />
-                          </TouchableOpacity>
-                        </View>
-                      ) : (
-                        <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate('CameraView', {
-                              callback: {
-                                onTakenPictureFromCamera,
-                              },
-                            })
-                          }
+                        <View
                           style={{
-                            backgroundColor: colours.gray,
-                            marginVertical: 8,
-                            padding: 15,
-                            borderRadius: 6,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: '49%',
-                            alignSelf: 'center',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginVertical: 10,
                           }}
                         >
-                          <Feather
-                            name="camera"
-                            size={50}
-                            color={colours.white}
-                          />
-                          <Text
+                          <Text>Date: {dayjs().format('DD-MM-YYYY')}</Text>
+                          <Text>Defect Number: {runningNumber}</Text>
+                        </View>
+
+                        {picture.length > 0 ? (
+                          <View style={{ marginVertical: 8 }}>
+                            <Image
+                              source={{ uri: picture[0].encodedImage }}
+                              style={{
+                                height: 200,
+                                width: '100%',
+                                resizeMode: 'cover',
+                                borderRadius: 6,
+                              }}
+                            />
+
+                            <TouchableOpacity
+                              style={{
+                                position: 'absolute',
+                                top: 5,
+                                right: 5,
+                                padding: 5,
+                                backgroundColor: 'red',
+                                borderRadius: 6,
+                              }}
+                              onPress={() => setPicture([])}
+                            >
+                              <Feather
+                                name="x"
+                                size={20}
+                                color={colours.white}
+                              />
+                            </TouchableOpacity>
+                          </View>
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() =>
+                              navigation.navigate('CameraView', {
+                                callback: {
+                                  onTakenPictureFromCamera,
+                                },
+                              })
+                            }
                             style={{
-                              fontSize: 12,
-                              fontWeight: 'bold',
-                              color: colours.white,
+                              backgroundColor: colours.gray,
+                              marginVertical: 8,
+                              padding: 15,
+                              borderRadius: 6,
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width: '49%',
+                              alignSelf: 'center',
                             }}
                           >
-                            {`Capture Image  `}
-                          </Text>
-                        </TouchableOpacity>
-                      )}
-
-                      <View
-                        style={[
-                          globalStyles.textBoxContainer,
-                          globalStyles.androidPickerContainer,
-                        ]}
-                      >
-                        <Picker
-                          placeholder="Select"
-                          placeholderStyle={{ color: 'black' }}
-                          textStyle={{ color: 'black' }}
-                          iosIcon={
                             <Feather
-                              name="chevron-down"
-                              size={18}
+                              name="camera"
+                              size={50}
+                              color={colours.white}
+                            />
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                fontWeight: 'bold',
+                                color: colours.white,
+                              }}
+                            >
+                              {`Capture Image  `}
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+
+                        <View
+                          style={[
+                            globalStyles.textBoxContainer,
+                            globalStyles.androidPickerContainer,
+                          ]}
+                        >
+                          <Picker
+                            placeholder="Select"
+                            placeholderStyle={{ color: 'black' }}
+                            textStyle={{ color: 'black' }}
+                            iosIcon={
+                              <Feather
+                                name="chevron-down"
+                                size={18}
+                                color="black"
+                              />
+                            }
+                            selectedValue={values.location}
+                            onValueChange={(value) => {
+                              setFieldValue('location', value);
+                            }}
+                            style={styles.pickerContainer}
+                            errorTxt={errors.location}
+                            isError={
+                              !!(
+                                (touched.location || submitCount > 0) &&
+                                errors.location
+                              )
+                            }
+                          >
+                            <Picker.Item
+                              key="defaultLoc"
+                              label="Select Location"
+                              value=""
+                            />
+                            {LOCATIONS.map((item) => (
+                              <Picker.Item
+                                key={item.value}
+                                label={item.label}
+                                value={item.value}
+                              />
+                            ))}
+                          </Picker>
+                        </View>
+
+                        <View
+                          style={[
+                            globalStyles.textBoxContainer,
+                            globalStyles.androidPickerContainer,
+                          ]}
+                        >
+                          <Picker
+                            placeholder="Select"
+                            placeholderStyle={{ color: 'black' }}
+                            textStyle={{ color: 'black' }}
+                            iosIcon={
+                              <Feather
+                                name="chevron-down"
+                                size={18}
+                                color="black"
+                              />
+                            }
+                            selectedValue={values.itemDefect}
+                            onValueChange={(value) => {
+                              setFieldValue('itemDefect', value);
+                            }}
+                            style={styles.pickerContainer}
+                            errorTxt={errors.itemDefect}
+                            isError={
+                              !!(
+                                (touched.itemDefect || submitCount > 0) &&
+                                errors.itemDefect
+                              )
+                            }
+                          >
+                            <Picker.Item
+                              key="defaultItemDefect"
+                              label="Select Item Defect"
+                              value=""
+                            />
+                            {ITEM_DEFECT.map((item) => (
+                              <Picker.Item
+                                key={item.value}
+                                label={item.label}
+                                value={item.value}
+                              />
+                            ))}
+                          </Picker>
+                        </View>
+
+                        <View
+                          style={[
+                            globalStyles.textBoxContainer,
+                            globalStyles.androidPickerContainer,
+                          ]}
+                        >
+                          <Picker
+                            placeholder="Select"
+                            placeholderStyle={{ color: 'black' }}
+                            textStyle={{ color: 'black' }}
+                            iosIcon={
+                              <Feather
+                                name="chevron-down"
+                                size={18}
+                                color="black"
+                              />
+                            }
+                            selectedValue={values.defectDetail}
+                            onValueChange={(value) => {
+                              setFieldValue('defectDetail', value);
+                            }}
+                            style={styles.pickerContainer}
+                            errorTxt={errors.defectDetail}
+                            isError={
+                              !!(
+                                (touched.defectDetail || submitCount > 0) &&
+                                errors.defectDetail
+                              )
+                            }
+                          >
+                            <Picker.Item
+                              key="defaultDefectDetails"
+                              label="Select Defect Details"
+                              value=""
+                            />
+                            {DEFECT_DETAILS.map((item) => (
+                              <Picker.Item
+                                key={item.value}
+                                label={item.label}
+                                value={item.value}
+                              />
+                            ))}
+                          </Picker>
+                        </View>
+
+                        <RegularTextBox
+                          label="Comment"
+                          multiline
+                          numberOfLines={3}
+                          placeholderTxt="Enter comment"
+                          value={values.comment}
+                          handleChange={handleChange('comment')}
+                          errorTxt={errors.comment}
+                          isError={
+                            (touched.comment || submitCount > 0) &&
+                            errors.comment
+                          }
+                          handleBlur={handleBlur('comment')}
+                          keyboardType="default"
+                        />
+
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}
+                        >
+                          <TouchableOpacity
+                            title="SUBMIT"
+                            onPress={() => navigation.goBack()}
+                          >
+                            <Feather
+                              name="arrow-left"
+                              size={20}
                               color="black"
                             />
-                          }
-                          selectedValue={values.location}
-                          onValueChange={(value) => {
-                            setFieldValue('location', value);
-                          }}
-                          style={styles.pickerContainer}
-                          errorTxt={errors.location}
-                          isError={
-                            !!(
-                              (touched.location || submitCount > 0) &&
-                              errors.location
-                            )
-                          }
-                        >
-                          <Picker.Item
-                            key="defaultLoc"
-                            label="Select Location"
-                            value=""
-                          />
-                          {LOCATIONS.map((item) => (
-                            <Picker.Item
-                              key={item.value}
-                              label={item.label}
-                              value={item.value}
-                            />
-                          ))}
-                        </Picker>
-                      </View>
+                          </TouchableOpacity>
 
-                      <View
-                        style={[
-                          globalStyles.textBoxContainer,
-                          globalStyles.androidPickerContainer,
-                        ]}
-                      >
-                        <Picker
-                          placeholder="Select"
-                          placeholderStyle={{ color: 'black' }}
-                          textStyle={{ color: 'black' }}
-                          iosIcon={
-                            <Feather
-                              name="chevron-down"
-                              size={18}
-                              color="black"
-                            />
-                          }
-                          selectedValue={values.itemDefect}
-                          onValueChange={(value) => {
-                            setFieldValue('itemDefect', value);
-                          }}
-                          style={styles.pickerContainer}
-                          errorTxt={errors.itemDefect}
-                          isError={
-                            !!(
-                              (touched.itemDefect || submitCount > 0) &&
-                              errors.itemDefect
-                            )
-                          }
-                        >
-                          <Picker.Item
-                            key="defaultItemDefect"
-                            label="Select Item Defect"
-                            value=""
-                          />
-                          {ITEM_DEFECT.map((item) => (
-                            <Picker.Item
-                              key={item.value}
-                              label={item.label}
-                              value={item.value}
-                            />
-                          ))}
-                        </Picker>
-                      </View>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                            }}
+                          >
+                            <TouchableOpacity
+                              title="SUBMIT"
+                              onPress={handleSubmit}
+                              style={{ marginRight: 10 }}
+                            >
+                              <Feather
+                                name="arrow-right"
+                                size={20}
+                                color="black"
+                              />
+                            </TouchableOpacity>
 
-                      <View
-                        style={[
-                          globalStyles.textBoxContainer,
-                          globalStyles.androidPickerContainer,
-                        ]}
-                      >
-                        <Picker
-                          placeholder="Select"
-                          placeholderStyle={{ color: 'black' }}
-                          textStyle={{ color: 'black' }}
-                          iosIcon={
-                            <Feather
-                              name="chevron-down"
-                              size={18}
-                              color="black"
-                            />
-                          }
-                          selectedValue={values.defectDetail}
-                          onValueChange={(value) => {
-                            setFieldValue('defectDetail', value);
-                          }}
-                          style={styles.pickerContainer}
-                          errorTxt={errors.defectDetail}
-                          isError={
-                            !!(
-                              (touched.defectDetail || submitCount > 0) &&
-                              errors.defectDetail
-                            )
-                          }
-                        >
-                          <Picker.Item
-                            key="defaultDefectDetails"
-                            label="Select Defect Details"
-                            value=""
-                          />
-                          {DEFECT_DETAILS.map((item) => (
-                            <Picker.Item
-                              key={item.value}
-                              label={item.label}
-                              value={item.value}
-                            />
-                          ))}
-                        </Picker>
-                      </View>
-
-                      <RegularTextBox
-                        label="Comment"
-                        multiline
-                        numberOfLines={3}
-                        placeholderTxt="Enter comment"
-                        value={values.comment}
-                        handleChange={handleChange('comment')}
-                        errorTxt={errors.comment}
-                        isError={
-                          (touched.comment || submitCount > 0) && errors.comment
-                        }
-                        handleBlur={handleBlur('comment')}
-                        keyboardType="default"
-                      />
-
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                        }}
-                      >
-                        <TouchableOpacity
-                          title="SUBMIT"
-                          onPress={() => navigation.goBack()}
-                        >
-                          <Feather name="arrow-left" size={20} color="black" />
-                        </TouchableOpacity>
-                        <TouchableOpacity title="SUBMIT" onPress={handleSubmit}>
-                          <Text>Finish</Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity
+                              title="SUBMIT"
+                              onPress={() => handleFinish(values)}
+                            >
+                              <Text>Finish</Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                )}
-              </Formik>
-            </TouchableWithoutFeedback>
-          </ScrollView>
-          {/* )} */}
+                  )}
+                </Formik>
+              </TouchableWithoutFeedback>
+            </ScrollView>
+          )}
         </View>
       </ImageBackground>
     </KeyboardAvoidingView>

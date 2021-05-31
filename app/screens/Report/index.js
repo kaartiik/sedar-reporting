@@ -7,6 +7,7 @@ import {
   View,
   Text,
   ScrollView,
+  FlatList,
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -50,12 +51,62 @@ function Report({ route }) {
 
   //   const [othersError] = useState('Type Required.');
 
-  const { reportedDefect, isLoading } = useSelector((state) => ({
+  const { reportedDefect, defects, isLoading } = useSelector((state) => ({
     reportedDefect: state.userReducer.reportedDefect,
+    defects: state.userReducer.defects,
     isLoading: state.userReducer.isLoading,
   }));
 
-  useEffect(() => {}, []);
+  const RenderItem = ({ item }) => {
+    return (
+      <View>
+        <View style={{ marginVertical: 10 }}>
+          <Text style={{ width: '50%', fontSize: 16, fontWeight: 'bold' }}>
+            Running Number: {item.runningNumber}
+          </Text>
+          <View style={{ flexDirection: 'row', marginVertical: 10 }}>
+            <Text style={{ width: '50%' }}>Name: {item.name}</Text>
+            <Text style={{ width: '50%' }}>Email: {item.email}</Text>
+          </View>
+          <Text style={styles.textMargin}>Address: {item.address}</Text>
+          <Text style={styles.textMargin}>
+            Phone Number: {item.phoneNumber}
+          </Text>
+          <View style={{ flexDirection: 'row', marginVertical: 10 }}>
+            <Text style={{ width: '50%' }}>Developer: {item.developer}</Text>
+            <Text style={{ width: '50%' }}>
+              Developer Email: {item.developerEmail}
+            </Text>
+          </View>
+          <Text style={styles.textMargin}>Date: {item.date}</Text>
+        </View>
+
+        <View>
+          <Image
+            source={{
+              uri: Object.values(item.uploadedImages)[0].image_url,
+            }}
+            style={{
+              height: 350,
+              width: '100%',
+              resizeMode: 'cover',
+              borderRadius: 6,
+            }}
+          />
+          <Text style={styles.textMargin}>
+            Location: {LOCATIONS[item.location].label}
+          </Text>
+          <Text style={styles.textMargin}>
+            Item Defect: {ITEM_DEFECT[item.itemDefect].label}
+          </Text>
+          <Text style={styles.textMargin}>
+            Defect Details: {DEFECT_DETAILS[item.defectDetail].label}
+          </Text>
+          <Text style={styles.textMargin}>Comment: {item.comment}</Text>
+        </View>
+      </View>
+    );
+  };
 
   return (
     <KeyboardAvoidingView
@@ -71,88 +122,42 @@ function Report({ route }) {
           {isLoading ? (
             <LoadingIndicator />
           ) : (
-            <ScrollView>
-              <View
-                style={[
+            <>
+              <FlatList
+                keyExtractor={(item, index) => index.toString()}
+                contentContainerStyle={[
                   globalStyles.addResourceFormContainer,
                   globalStyles.mildShadow,
                 ]}
+                data={defects}
+                renderItem={({ item, index }) => (
+                  <RenderItem key={index} item={item} />
+                )}
+                ListEmptyComponent={
+                  <View style={styles.flatlistEmptyContainer}>
+                    <Text>No scans</Text>
+                  </View>
+                }
+              />
+
+              <Text style={[styles.textMargin, { fontWeight: 'bold' }]}>
+                Report submitted and acknowledged by {reportedDefect.name}
+              </Text>
+
+              <TouchableOpacity
+                style={{
+                  borderWidth: 0.5,
+                  borderColor: colours.gray,
+                  borderRadius: 6,
+                  padding: 5,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                onPress={() => navigation.navigate('Disclaimer')}
               >
-                <View style={{ marginVertical: 10 }}>
-                  <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-                    <Text style={{ width: '50%' }}>
-                      Name: {reportedDefect.name}
-                    </Text>
-                    <Text style={{ width: '50%' }}>
-                      Email: {reportedDefect.email}
-                    </Text>
-                  </View>
-                  <Text style={styles.textMargin}>
-                    Address: {reportedDefect.address}
-                  </Text>
-                  <Text style={styles.textMargin}>
-                    Phone Number: {reportedDefect.phoneNumber}
-                  </Text>
-                  <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-                    <Text style={{ width: '50%' }}>
-                      Developer: {reportedDefect.developer}
-                    </Text>
-                    <Text style={{ width: '50%' }}>
-                      Developer Email: {reportedDefect.developerEmail}
-                    </Text>
-                  </View>
-                  <Text style={styles.textMargin}>
-                    Date: {reportedDefect.date}
-                  </Text>
-                </View>
-
-                <View>
-                  <Image
-                    source={{
-                      uri: Object.values(reportedDefect.uploadedImages)[0]
-                        .image_url,
-                    }}
-                    style={{
-                      height: 350,
-                      width: '100%',
-                      resizeMode: 'cover',
-                      borderRadius: 6,
-                    }}
-                  />
-                  <Text style={styles.textMargin}>
-                    Location: {LOCATIONS[reportedDefect.location].label}
-                  </Text>
-                  <Text style={styles.textMargin}>
-                    Item Defect: {ITEM_DEFECT[reportedDefect.itemDefect].label}
-                  </Text>
-                  <Text style={styles.textMargin}>
-                    Defect Details:{' '}
-                    {DEFECT_DETAILS[reportedDefect.defectDetail].label}
-                  </Text>
-                  <Text style={styles.textMargin}>
-                    Comment: {reportedDefect.comment}
-                  </Text>
-
-                  <Text style={[styles.textMargin, { fontWeight: 'bold' }]}>
-                    Report submitted and acknowledged by {reportedDefect.name}
-                  </Text>
-
-                  <TouchableOpacity
-                    style={{
-                      borderWidth: 0.5,
-                      borderColor: colours.gray,
-                      borderRadius: 6,
-                      padding: 5,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                    onPress={() => navigation.navigate('Disclaimer')}
-                  >
-                    <Text>Finish</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </ScrollView>
+                <Text>Finish</Text>
+              </TouchableOpacity>
+            </>
           )}
         </View>
       </ImageBackground>

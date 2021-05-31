@@ -10,7 +10,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Keyboard,
+  Image,
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
@@ -105,6 +105,18 @@ function Disclaimer({ route }) {
               </TouchableOpacity>
             </View>
           </ScrollView>
+          <Image
+            source={require('../../../assets/politeknik_logo.jpeg')}
+            style={{
+              height: 350,
+              width: '50%',
+              resizeMode: 'contain',
+              borderRadius: 6,
+              position: 'absolute',
+              bottom: -100,
+              right: 20,
+            }}
+          />
         </View>
       </ImageBackground>
     </KeyboardAvoidingView>

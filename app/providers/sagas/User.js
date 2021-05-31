@@ -11,6 +11,8 @@ import {
   fork,
 } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
 import * as Permissions from 'expo-permissions';
 import * as Notifications from 'expo-notifications';
 import { navigate, reset, goBack } from '../services/NavigatorService';
@@ -20,17 +22,35 @@ import {
   putLoadingStatus,
   putReportedDefect,
   putRunningNumber,
+  putSessionID,
+  putAllSessionDefects,
 } from '../actions/User';
 
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
 
-// const getUuidFromState = (state) => state.userReducer.uuid;
+const getSessionIDFromState = (state) => state.userReducer.sessionID;
 const getUserFromState = (state) => state.userReducer.userDetails;
+
+const setToken = async (token) => AsyncStorage.setItem('token', token);
+
+const resetToken = async () => AsyncStorage.removeItem('token');
+
+const getToken = async () => AsyncStorage.getItem('token');
 
 function* syncUserSaga() {
   yield put(putLoadingStatus(true));
+
+  const sessionID = yield call(getToken);
+
+  if (sessionID !== '' && sessionID !== null && sessionID !== undefined) {
+    yield put(putSessionID(sessionID));
+  } else {
+    const newSessionID = uuid.v4();
+    yield put(putSessionID(newSessionID));
+    yield call(setToken, newSessionID);
+  }
 
   setTimeout(() => {
     reset('AppStack');
@@ -38,23 +58,27 @@ function* syncUserSaga() {
 
   yield put(putLoadingStatus(false));
 }
+
 function* getRunningNumberAndNavSaga({ payload }) {
   const onSuccess = payload;
   try {
+    const sessionID = yield select(getSessionIDFromState);
     yield put(putLoadingStatus(true));
 
-    const data = yield call(rsf.database.read, `reportedDefects`);
+    const data = yield call(rsf.database.read, `reportedDefects/${sessionID}`);
 
     const exists = data !== null && data !== undefined;
 
     if (exists) {
       const reportArr = Object.values(data);
+
       yield put(putRunningNumber(reportArr.length + 1));
     } else {
       yield put(putRunningNumber(1));
     }
 
     onSuccess();
+    yield put(putLoadingStatus(false));
   } catch (error) {
     yield put(putLoadingStatus(false));
     alert(error);
@@ -96,9 +120,17 @@ function* uploadImages(images, key) {
   }
 }
 
-function* addReportedDefect({ payload }) {
+function* addReportedDefectSaga({ payload }) {
   const { values, onSuccess } = payload;
-  const { picture, location, itemDefect, defectDetail, comment } = values;
+  const {
+    picture,
+    location,
+    itemDefect,
+    defectDetail,
+    comment,
+    runningNumber,
+  } = values;
+  const sessionID = yield select(getSessionIDFromState);
   const userDetails = yield select(getUserFromState);
   const uniqueId = new Date().getTime();
 
@@ -113,14 +145,75 @@ function* addReportedDefect({ payload }) {
       itemDefect,
       defectDetail,
       comment,
+      runningNumber,
       uploadedImages,
     };
 
-    yield call(rsf.database.update, `reportedDefects/${uniqueId}`, reportObj);
-
-    console.log(Object.values(uploadedImages)[0]);
+    yield call(
+      rsf.database.update,
+      `reportedDefects/${sessionID}/${uniqueId}`,
+      reportObj
+    );
 
     yield put(putReportedDefect(reportObj));
+
+    onSuccess();
+
+    yield put(putLoadingStatus(false));
+  } catch (error) {
+    yield put(putLoadingStatus(false));
+    alert(error);
+  }
+}
+
+function* addReportedDefectFinalSaga({ payload }) {
+  const { values, onSuccess } = payload;
+  const {
+    picture,
+    location,
+    itemDefect,
+    defectDetail,
+    comment,
+    runningNumber,
+  } = values;
+  const sessionID = yield select(getSessionIDFromState);
+  const userDetails = yield select(getUserFromState);
+  const uniqueId = new Date().getTime();
+
+  try {
+    yield put(putLoadingStatus(true));
+
+    const uploadedImages = yield call(uploadImages, picture, uniqueId);
+
+    const reportObj = {
+      ...userDetails,
+      location,
+      itemDefect,
+      defectDetail,
+      comment,
+      runningNumber,
+      uploadedImages,
+    };
+
+    yield call(
+      rsf.database.update,
+      `reportedDefects/${sessionID}/${uniqueId}`,
+      reportObj
+    );
+
+    yield put(putReportedDefect(reportObj));
+
+    const allDefectsObj = yield call(
+      rsf.database.read,
+      `reportedDefects/${sessionID}`
+    );
+
+    const allDefectsArr = Object.values(allDefectsObj);
+    yield put(putAllSessionDefects(allDefectsArr));
+
+    const newSessionID = uuid.v4();
+    yield put(putSessionID(newSessionID));
+    yield call(setToken, newSessionID);
 
     onSuccess();
 
@@ -134,7 +227,8 @@ function* addReportedDefect({ payload }) {
 export default function* User() {
   yield all([
     takeEvery(actions.SYNC_USER, syncUserSaga),
-    takeLatest(actions.ADD.REPORTED_DEFECT, addReportedDefect),
+    takeLatest(actions.ADD.REPORTED_DEFECT, addReportedDefectSaga),
+    takeLatest(actions.ADD.REPORTED_DEFECT_FINAL, addReportedDefectFinalSaga),
     takeLatest(actions.GET.RUNNING_NUMBER, getRunningNumberAndNavSaga),
   ]);
 }
