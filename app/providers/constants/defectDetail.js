@@ -1,6 +1,6 @@
 const DEFECT_DETAILS = [
   {
-    label: 'Floor',
+    label: 'Crack',
     value: 0,
   },
   {
@@ -24,7 +24,7 @@ const DEFECT_DETAILS = [
     value: 5,
   },
   {
-    label: 'Clogged/',
+    label: 'Choke/Stuck',
     value: 6,
   },
   {

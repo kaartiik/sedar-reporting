@@ -62,7 +62,7 @@ function Report({ route }) {
       <View>
         <View style={{ marginVertical: 10 }}>
           <Text style={{ width: '50%', fontSize: 16, fontWeight: 'bold' }}>
-            Running Number: {item.runningNumber}
+            Defect Number: {item.runningNumber}
           </Text>
           <View style={{ flexDirection: 'row', marginVertical: 10 }}>
             <Text style={{ width: '50%' }}>Name: {item.name}</Text>

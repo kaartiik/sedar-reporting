@@ -155,7 +155,7 @@ function* addReportedDefectSaga({ payload }) {
       reportObj
     );
 
-    yield put(putReportedDefect(reportObj));
+    yield put(putRunningNumber(runningNumber + 1));
 
     onSuccess();
 

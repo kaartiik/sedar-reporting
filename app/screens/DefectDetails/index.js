@@ -136,7 +136,7 @@ function DefectDetails({ route }) {
     );
   };
 
-  const handleNext = (values) => {
+  const handleNext = (values, resetForm) => {
     const { location, itemDefect, defectDetail, comment } = values;
 
     dispatch(
@@ -146,7 +146,10 @@ function DefectDetails({ route }) {
     dispatch(
       addreportedDefect(
         { picture, location, itemDefect, defectDetail, comment, runningNumber },
-        () => navigation.navigate('Disclaimer')
+        () => {
+          setPicture([]);
+          resetForm();
+        }
       )
     );
   };
@@ -184,7 +187,9 @@ function DefectDetails({ route }) {
                     ),
                     comment: Yup.string(),
                   })}
-                  onSubmit={(values) => handleNext(values)}
+                  onSubmit={(values, { resetForm }) =>
+                    handleNext(values, resetForm)
+                  }
                 >
                   {({
                     handleChange,
@@ -451,30 +456,24 @@ function DefectDetails({ route }) {
                             />
                           </TouchableOpacity>
 
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                            }}
+                          <TouchableOpacity
+                            title="SUBMIT"
+                            onPress={handleSubmit}
+                            style={{ marginRight: 10 }}
                           >
-                            <TouchableOpacity
-                              title="SUBMIT"
-                              onPress={handleSubmit}
-                              style={{ marginRight: 10 }}
-                            >
-                              <Feather
-                                name="arrow-right"
-                                size={20}
-                                color="black"
-                              />
-                            </TouchableOpacity>
+                            <Feather
+                              name="arrow-right"
+                              size={20}
+                              color="black"
+                            />
+                          </TouchableOpacity>
 
-                            <TouchableOpacity
-                              title="SUBMIT"
-                              onPress={() => handleFinish(values)}
-                            >
-                              <Text>Finish</Text>
-                            </TouchableOpacity>
-                          </View>
+                          <TouchableOpacity
+                            title="SUBMIT"
+                            onPress={() => handleFinish(values)}
+                          >
+                            <Text>Finish</Text>
+                          </TouchableOpacity>
                         </View>
                       </View>
                     </View>
