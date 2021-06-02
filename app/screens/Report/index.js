@@ -57,30 +57,36 @@ function Report({ route }) {
     isLoading: state.userReducer.isLoading,
   }));
 
-  const RenderItem = ({ item }) => {
+  const RenderItem = ({ item, index }) => {
     return (
       <View>
-        <View style={{ marginVertical: 10 }}>
-          <Text style={{ width: '50%', fontSize: 16, fontWeight: 'bold' }}>
-            Defect Number: {item.runningNumber}
-          </Text>
-          <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-            <Text style={{ width: '50%' }}>Name: {item.name}</Text>
-            <Text style={{ width: '50%' }}>Email: {item.email}</Text>
-          </View>
-          <Text style={styles.textMargin}>Address: {item.address}</Text>
-          <Text style={styles.textMargin}>
-            Phone Number: {item.phoneNumber}
-          </Text>
-          <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-            <Text style={{ width: '50%' }}>Developer: {item.developer}</Text>
-            <Text style={{ width: '50%' }}>
-              Developer Email: {item.developerEmail}
+        {index === 0 && (
+          <View style={{ marginVertical: 10 }}>
+            <View style={{ flexDirection: 'row', marginVertical: 10 }}>
+              <Text style={{ width: '50%' }}>Name: {item.name}</Text>
+              <Text style={{ width: '50%' }}>Email: {item.email}</Text>
+            </View>
+            <Text style={styles.textMargin}>Address: {item.address}</Text>
+            <Text style={styles.textMargin}>
+              Phone Number: {item.phoneNumber}
             </Text>
+            <View style={{ flexDirection: 'row', marginVertical: 10 }}>
+              <Text style={{ width: '50%' }}>Developer: {item.developer}</Text>
+              <Text style={{ width: '50%' }}>
+                Developer Email: {item.developerEmail}
+              </Text>
+            </View>
+            <Text style={styles.textMargin}>Date: {item.date}</Text>
           </View>
-          <Text style={styles.textMargin}>Date: {item.date}</Text>
-        </View>
+        )}
 
+        <View
+          style={{
+            height: 1,
+            backgroundColor: colours.gray,
+            marginVertical: 10,
+          }}
+        />
         <View>
           <Image
             source={{
@@ -93,6 +99,16 @@ function Report({ route }) {
               borderRadius: 6,
             }}
           />
+          <Text
+            style={{
+              width: '50%',
+              fontSize: 16,
+              fontWeight: 'bold',
+              marginTop: 10,
+            }}
+          >
+            Defect Report: {item.runningNumber}
+          </Text>
           <Text style={styles.textMargin}>
             Location: {LOCATIONS[item.location].label}
           </Text>
@@ -131,7 +147,7 @@ function Report({ route }) {
                 ]}
                 data={defects}
                 renderItem={({ item, index }) => (
-                  <RenderItem key={index} item={item} />
+                  <RenderItem key={index} item={item} index={index} />
                 )}
                 ListEmptyComponent={
                   <View style={styles.flatlistEmptyContainer}>

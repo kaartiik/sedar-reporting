@@ -8,7 +8,7 @@ const ITEM_DEFECT = [
     value: 1,
   },
   {
-    label: 'Siling',
+    label: 'Ceiling',
     value: 2,
   },
   {
